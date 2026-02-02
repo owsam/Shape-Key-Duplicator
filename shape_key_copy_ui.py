@@ -1,9 +1,9 @@
 bl_info = {
-    "name": "Shape Key Duplicator",
+    "name": "Shapekey Duplicator",
     "author": "Osamu Watanabe",
     "version": (1, 0),
     "blender": (2, 80, 0),
-    "location": "View3D > Sidebar > Shape Key Tools",
+    "location": "View3D > Sidebar > Shapekey Tools",
     "description": "Duplicate a selected shape key from the active object",
     "category": "Object",
 }
@@ -13,7 +13,7 @@ import bpy
 class SKDProperties(bpy.types.PropertyGroup):
     key_enum: bpy.props.EnumProperty(
         name="Shape Key",
-        description="Select a shape key to duplicate",
+        description="Select a shapekey to duplicate",
         items=lambda self, context: [
             (key.name, key.name, "") 
             for key in context.object.data.shape_keys.key_blocks
@@ -23,7 +23,7 @@ class SKDProperties(bpy.types.PropertyGroup):
 
 class OBJECT_OT_duplicate_shape_key(bpy.types.Operator):
     bl_idname = "object.duplicate_shape_key"
-    bl_label = "Duplicate Shape Key"
+    bl_label = "Duplicate Shapekey"
     bl_description = "Duplicate the selected shape key"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -33,12 +33,12 @@ class OBJECT_OT_duplicate_shape_key(bpy.types.Operator):
         shape_keys = obj.data.shape_keys
 
         if not shape_keys:
-            self.report({'WARNING'}, "No shape keys found.")
+            self.report({'WARNING'}, "No shapekeys found.")
             return {'CANCELLED'}
 
         source_key = shape_keys.key_blocks.get(key_name)
         if not source_key:
-            self.report({'WARNING'}, f"Shape key '{key_name}' not found.")
+            self.report({'WARNING'}, f"Shapekey '{key_name}' not found.")
             return {'CANCELLED'}
 
         # Create a new shape key
@@ -46,15 +46,15 @@ class OBJECT_OT_duplicate_shape_key(bpy.types.Operator):
         for i, coord in enumerate(source_key.data):
             new_key.data[i].co = coord.co
 
-        self.report({'INFO'}, f"Shape key '{key_name}' duplicated.")
+        self.report({'INFO'}, f"Shapekey '{key_name}' duplicated.")
         return {'FINISHED'}
 
 class OBJECT_PT_shape_key_tools(bpy.types.Panel):
-    bl_label = "Shape Key Tools"
+    bl_label = "Shapekey Tools"
     bl_idname = "OBJECT_PT_shape_key_tools"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Shape Key Tools'
+    bl_category = 'Shapekey Tools'
 
     def draw(self, context):
         layout = self.layout
@@ -81,3 +81,4 @@ def unregister():
 
 if __name__ == "__main__":
     register()
+
